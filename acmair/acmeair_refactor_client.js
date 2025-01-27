@@ -1,6 +1,6 @@
 import amqp from 'amqplib';
 
-export async function cancelBooking_client(number, userid, callback) {
+export async function cancelBooking_client(bookingid, userid, callback) {
 
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
@@ -10,7 +10,7 @@ export async function cancelBooking_client(number, userid, callback) {
     await channel.assertQueue(callbackQueue, { durable: false });
 
     const msgContent = {
-        number: number,
+        bookingid: bookingid,
         userid: userid,
         callbackQueueName: callbackQueue
     }
@@ -33,12 +33,12 @@ export async function cancelBooking_client(number, userid, callback) {
 
 function main() {
 
-    let number = 100;
+    let bookingid = 100;
     let userid = 123;
 
-    cancelBooking_client(number, userid, function (error) {
+    cancelBooking_client(bookingid, userid, function (error) {
         if (error) {
-            console.log("Resposta enviada: " + error);
+            console.log("Resposta enviada: " + 'error');
         }
         else {
             console.log("Resposta enviada: " + 'success');
