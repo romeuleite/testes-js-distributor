@@ -1,0 +1,68 @@
+servers:
+  - id: alfa
+    port: 5555
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+  - id: beta
+    port: 4444
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+  - id: gama
+    port: 3333
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+  - id: delta
+    port: 2222
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+
+
+functions:
+  - name: calculateRemainder
+    server: alfa
+    parameters:
+      - name: a
+        type: number
+      - name: b
+        type: number
+    method: rabbit
+    queue: calculateRemainder_call_queue
+    callback_queue: calculateRemainder_callback_queue
+  - name: isDivisor
+    server: beta
+    parameters:
+      - name: a
+        type: number
+      - name: b
+        type: number
+    method: rabbit
+    queue: isDivisor_call_queue
+    callback_queue: isDivisor_callback_queue
+  - name: isDivisorOfBoth
+    server: gama
+    parameters:
+      - name: divisor
+        type: number
+      - name: a
+        type: number
+      - name: b
+        type: number
+    method: rabbit
+    queue: isDivisorOfBoth_call_queue
+    callback_queue: isDivisorOfBoth_callback_queue
+  - name: checkCommonDivisor
+    server: delta
+    parameters:
+      - name: divisor
+        type: number
+      - name: a
+        type: number
+      - name: b
+        type: number
+    method: rabbit
+    queue: checkCommonDivisor_call_queue
+    callback_queue: checkCommonDivisor_callback_queue
