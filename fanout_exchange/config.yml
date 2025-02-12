@@ -1,0 +1,30 @@
+servers:
+  - id: alfa
+    port: 5555
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+  - id: beta
+    port: 4444
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+
+
+functions:
+  - name: sendPushNotification
+    server: alfa
+    parameters:
+      - name: user
+        type: string
+      - name: subject
+        type: string
+    method: rabbit
+    exchange_name: send_push_exchange
+  - name: processPushNotification
+    server: beta
+    parameters:
+      - name: notification
+        type: string
+    method: rabbit
+    exchange_name: process_notification_exchange
