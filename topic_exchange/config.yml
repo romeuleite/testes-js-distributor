@@ -1,0 +1,46 @@
+servers:
+  - id: alfa
+    port: 5555
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+  - id: beta
+    port: 4444
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+  - id: delta
+    port: 3333
+    url: localhost
+    rabbitmq:
+      connectionUrl: amqp://localhost
+
+
+functions:
+  - name: sendLogs
+    server: alfa
+    parameters:
+      - name: log
+        type: string
+    method: rabbit
+    exchange_name: log_exchange
+    exchange_type: topic
+    routing_key: log.error.warnings
+  - name: processErrorLogs
+    server: beta
+    parameters:
+      - name: log
+        type: string
+    method: rabbit
+    exchange_name: log_exchange
+    exchange_type: topic
+    routing_key: log.error.*
+  - name: processWarningLogs
+    server: delta
+    parameters:
+      - name: log
+        type: string
+    method: rabbit
+    exchange_name: log_exchange
+    exchange_type: topic
+    routing_key: log.*.warning
